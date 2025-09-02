@@ -13,4 +13,4 @@ The main challenge still being solved is how to automatically **organize uploade
 
 ## Demo Video
 
-https://github.com/Sungchunn/n8n-invoice-to-Gsuite/blob/main/images/ScreenRecording.mov
+https://github.com/Sungchunn/n8n-invoice-to-Gsuite/blob/main/images/demo.gif
