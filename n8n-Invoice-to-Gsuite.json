@@ -1,0 +1,548 @@
+{
+  "name": "n8n-Invoice-to-Gsuite",
+  "nodes": [
+    {
+      "parameters": {
+        "triggerOn": "folder",
+        "path": "/Users/chromatrical/CAREER/n8n/n8n-Invoice-Gsuite/Trigger",
+        "events": [
+          "add"
+        ],
+        "options": {}
+      },
+      "type": "n8n-nodes-base.localFileTrigger",
+      "typeVersion": 1,
+      "position": [
+        -144,
+        -432
+      ],
+      "id": "c93fe5e1-895c-4dee-94a1-5cb1352f85c3",
+      "name": "Local File Trigger"
+    },
+    {
+      "parameters": {
+        "fileSelector": "={{ $json.path }}",
+        "options": {
+          "dataPropertyName": "data"
+        }
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        96,
+        -432
+      ],
+      "id": "c818a359-8ae3-473e-a202-403213993963",
+      "name": "Read File"
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "binaryPropertyName": "=data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        336,
+        -432
+      ],
+      "id": "cfb4964a-da7d-4e51-9338-52f6635110f3",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "inputDataFieldName": "=data",
+        "name": "={{ $json.fileName }}",
+        "driveId": {
+          "__rl": true,
+          "value": "My Drive",
+          "mode": "list",
+          "cachedResultName": "My Drive",
+          "cachedResultUrl": "https://drive.google.com/drive/my-drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "=1RsoA7cS3h9Ijy5DhhIpxyBD1yWbvWUJc",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -80,
+        -128
+      ],
+      "id": "9849d10c-d9ac-4689-a4d9-a97b03509cc8",
+      "name": "Upload file",
+      "credentials": {}
+    },
+    {
+      "parameters": {
+        "content": "## 1. Set Local Directory as Trigger folder\n- once an pdf invoice is uploaded it triggers the workflow\n",
+        "height": 128,
+        "width": 432,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -784,
+        -480
+      ],
+      "id": "ef504b45-0870-4068-873a-41036eab26c1",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## 2. Read Binary Data\n",
+        "height": 80,
+        "width": 432,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -784,
+        -320
+      ],
+      "id": "d5011c2f-645c-4f2f-996c-1e85f3e75c51",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## 3. Extract Text from PDF\n- Dealing with local PDF files allows you to extract text directly for free\n",
+        "height": 112,
+        "width": 432,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -784,
+        -208
+      ],
+      "id": "13e53e34-349e-437f-b6c3-2913e18aa1d8",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## 4. ChatGPT Node to Parse the data into meaningful json format\n",
+        "height": 112,
+        "width": 432
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -784,
+        -64
+      ],
+      "id": "2c8482f8-f517-4691-8fe0-d7b7a089db90",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "# Loop Over",
+        "height": 944,
+        "width": 704,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -928,
+        -592
+      ],
+      "id": "662d45d0-0e7e-41bd-913f-3e469d88c65f",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1cJOQWVAoBasc8GOTtuS77BXjKDU5hDhQ8Opx_Lf64CQ",
+          "mode": "list",
+          "cachedResultName": "n8n-client-invoice",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1cJOQWVAoBasc8GOTtuS77BXjKDU5hDhQ8Opx_Lf64CQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Plus91 Labs",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1cJOQWVAoBasc8GOTtuS77BXjKDU5hDhQ8Opx_Lf64CQ/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "timestamp": "={{ $now }}",
+            "client_name": "={{ $json.client_name }}",
+            "client_company": "={{ $json.client_company }}",
+            "country": "={{  $json.country }}",
+            "date_id": "={{  $json.date_id }}",
+            "month_of_billing": "={{ $json.month_of_billing }}",
+            "platform": "={{  $json.platform }}",
+            "id": "={{ $json.id }}",
+            "price_paid": "={{  $json.price_paid }}",
+            "price_paid_thb": "=THB {{ $json.price_paid_thb}}",
+            "billing_id": "={{ $json.billing_id }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "timestamp",
+              "displayName": "timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "client_name",
+              "displayName": "client_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "client_company",
+              "displayName": "client_company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "country",
+              "displayName": "country",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "billing_id",
+              "displayName": "billing_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "date_id",
+              "displayName": "date_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "month_of_billing",
+              "displayName": "month_of_billing",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "platform",
+              "displayName": "platform",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "price_paid",
+              "displayName": "price_paid",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "price_paid_thb",
+              "displayName": "price_paid_thb",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        464,
+        80
+      ],
+      "id": "cf521989-e273-4dcd-9e00-c2fab49e7c9d",
+      "name": "Google Sheet Invoice Tracking",
+      "credentials": {}
+    },
+    {
+      "parameters": {
+        "content": "## 5. Get Currency Rate\n\n## 6. Calculate Rate After Conversion\n",
+        "width": 432,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -784,
+        80
+      ],
+      "id": "b2ecf29a-36f0-4369-af3d-7199fcd1b130",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "resource": "exchangeRate",
+        "source": "={{ $json.currency }}",
+        "target": "=THB",
+        "additionalFields": {
+          "time": "={{ $now }}"
+        }
+      },
+      "type": "n8n-nodes-base.wise",
+      "typeVersion": 1,
+      "position": [
+        80,
+        80
+      ],
+      "id": "97d79795-4770-4db6-9a90-94790e09f619",
+      "name": "Get an exchange rate",
+      "credentials": {}
+    },
+    {
+      "parameters": {
+        "jsCode": "// ===========================================\n// CODE NODE 1: Parse GPT Response (hardened)\n// ===========================================\n// Accepts inputs where GPT fields may be under:\n//   - json.message.content\n//   - json.output\n//   - json\n// Produces one flat item per input with normalized keys:\n//   - price_paid_to_company (string; original price text)\n//   - billing_id (string)\n// All string fields are trimmed.\n\nfunction pickContent(root) {\n  return root?.message?.content ?? root?.output ?? root ?? {};\n}\n\nfunction trimStringsShallow(obj) {\n  const out = {};\n  for (const [k, v] of Object.entries(obj || {})) {\n    out[k] = (typeof v === 'string') ? v.trim() : v;\n  }\n  return out;\n}\n\nfunction firstDefined(...vals) {\n  for (const v of vals) if (v !== undefined && v !== null && v !== '') return v;\n  return null;\n}\n\nconst items = $input.all();\n\nreturn items.map(it => {\n  const root = it.json || {};\n  const contentRaw = pickContent(root);\n  const content = (contentRaw && typeof contentRaw === 'object') ? contentRaw : {};\n\n  // Shallow-trim string fields\n  const trimmed = trimStringsShallow(content);\n\n  // Normalize fields for downstream nodes\n  const pricePaidOriginal = firstDefined(\n    trimmed.price_paid_to_company,\n    trimmed.price_paid,\n    trimmed.amount,\n    trimmed.total_amount,\n    trimmed.total\n  );\n\n  const billingId = firstDefined(\n    trimmed.billing_id,\n    trimmed.invoice_id,\n    trimmed.id,\n    trimmed.reference_id\n  );\n\n  // Build output (keep all GPT fields + normalized keys)\n  return {\n    json: {\n      ...trimmed,\n      price_paid_to_company: pricePaidOriginal ?? null, // keep as string if present\n      billing_id: billingId ?? null\n    }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -112,
+        80
+      ],
+      "id": "3a5bced6-6bdd-40ef-80e0-e9e82b031d31",
+      "name": "Parse GPT value"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ===========================================\n// CODE NODE 2: Currency Conversion & Final Output (robust + flexible paths)\n// ===========================================\n\n// 1) Pull parsed GPT fields from the earlier node, regardless of wrapper\nconst gptRaw = $('Parse GPT value').first().json;\nconst gpt =\n  gptRaw?.output ??\n  gptRaw?.message?.content ??\n  gptRaw ?? {};\n\n// 2) Wise rate payload comes in as this node's input\nconst inJson = $input.first().json;\nconst sourceCurrency = inJson.source;      // e.g., \"SGD\"\nconst targetCurrency = inJson.target;      // e.g., \"THB\"\nconst rate = Number(inJson.rate);\n\n// 3) Get a clean numeric price, if any (supports \"SGD 1,234.56\", \"56.00\", \"A$66.53\", etc.)\nconst priceStr = gpt.price_paid ?? gpt.price_paid_to_company ?? '';\nconst cleaned = String(priceStr).replace(/[^\\d.,-]/g, '');\n\nlet numeric = null;\nif (cleaned) {\n  let normalized = cleaned;\n  const hasDot = cleaned.includes('.');\n  const hasComma = cleaned.includes(',');\n  if (hasDot && hasComma) {\n    normalized = cleaned.replace(/,/g, '');                 // \"1,234.56\" -> \"1234.56\"\n  } else if (!hasDot && hasComma) {\n    normalized = cleaned.replace(/\\./g, '').replace(',', '.'); // \"1.234,56\" -> \"1234.56\"\n  }\n  const n = Number(normalized);\n  if (Number.isFinite(n)) numeric = n;\n}\n\n// 4) Compute conversion if both price and rate are valid\nlet pricePaidOut;\nlet pricePaidTHBOut;\n\nif (numeric === null || !Number.isFinite(rate)) {\n  pricePaidOut = \"NOT_FOUND\";\n  pricePaidTHBOut = \"NOT_FOUND\";\n} else {\n  pricePaidOut = +numeric.toFixed(2);\n  pricePaidTHBOut = +(numeric * rate).toFixed(2);\n}\n\n// 5) Timestamp\nconst nowIso = new Date().toISOString();\n\n// 6) Return flat row for Sheets\nreturn [\n  {\n    json: {\n      timestamp: nowIso,\n      client_name: gpt.client_name,\n      client_company: gpt.client_company,\n      country: gpt.country,\n      billing_id: gpt.billing_id ?? gpt.id,\n      id: gpt.id,\n      date_id: gpt.date_id,\n      month_of_billing: gpt.month_of_billing,\n      platform: gpt.platform,\n\n      // Price fields\n      price_paid: pricePaidOut,        // number or \"NOT_FOUND\"\n      price_paid_thb: pricePaidTHBOut, // number or \"NOT_FOUND\"\n\n      // Debug/reference\n      original_price_string: priceStr || \"NOT_FOUND\",\n      original_currency: sourceCurrency,\n      target_currency: targetCurrency,\n      conversion_rate: Number.isFinite(rate) ? rate : \"NOT_FOUND\",\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        272,
+        80
+      ],
+      "id": "05c5eb1c-e555-481b-bebd-7de9fffb6ca6",
+      "name": "Parse Exchange Rate"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=# Optimized Invoice Extraction Prompt\n\n```\nYou are a financial data extraction specialist. Your task is to extract billing information from invoice PDF content and return structured JSON data.\n\n<document_content>\n {{ $json.text }}\n</document_content>\n\n<instructions>\n1. Analyze the PDF text to identify billing/invoice information from THIS single document only\n2. Extract the following required fields with exact specifications:\n   - **client_name**: Individual contact/person being billed (from Bill-To, Customer, Client sections)\n   - **client_company**: Company/organization being billed (from billing address)\n   - **country**: Client's country (from billing address, typically at end)\n   - **billing_id**: Account ID, customer ID, or domain identifier (NOT invoice number)\n   - **id**: Invoice number, reference number, or document number\n   - **date_id**: Invoice/billing date in YYYY-MM-DD format\n   - **month_of_billing**: Service period month in YYYY-MM format (use END month of billing period)\n   - **platform**: \"Google\" for Google Workspace/Gmail OR \"Outlook\" for Microsoft 365/Office\n   - **price_paid**: Total amount before tax (subtotal)\n   - **currency**: Currency code based on priority currencies\n3. If any field cannot be determined, use \"NOT_FOUND\"\n</instructions>\n\n<currency_priority>\nFocus on these currencies in order of priority:\n- USD ($)\n- EUR (\u20ac) \n- AUD (A$, AU$)\n- SGD (S$, SGD)\n- THB (\u0e3f, THB)\n</currency_priority>\n\n<date_extraction_rules>\n- **date_id**: Look for \"Document Date:\", \"Invoice Date:\", \"Date:\" \u2192 convert to YYYY-MM-DD\n- **month_of_billing**: Extract from \"Billing Period:\", \"Service Period:\", \"Usage period:\" \u2192 use END month in YYYY-MM format\n\nExamples:\n- \"Billing Period: 17/04/2025 - 16/05/2025\" \u2192 month_of_billing: \"2025-05\"\n- \"Usage Jul 1 - Jul 31\" \u2192 month_of_billing: \"2025-07\"\n- \"Service Period: Jan 2025\" \u2192 month_of_billing: \"2025-01\"\n</date_extraction_rules>\n\n<platform_detection>\n- **Google**: Keywords \"Google\", \"Google Workspace\", \"Google Asia Pacific\", \"Gmail\"\n- **Outlook**: Keywords \"Microsoft\", \"Office 365\", \"Microsoft 365\", \"Outlook\"\n</platform_detection>\n```\n\n\n",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=# System Prompt: \nYou are an expert document analysis assistant specialized in extracting billing information from PDF text content. Your role is to accurately identify and extract specific data points from Microsoft Outlook/Office 365 billing documents with high precision and consistency.\nYou have extensive experience with:\n- Microsoft 365 invoice and billing document text patterns\n- Microsoft billing date format recognition and standardization\n- Client identification from Microsoft billing formats\n- Company and geographic information extraction from Microsoft invoices\n- Microsoft 365/Office 365/Outlook service billing structures\n- Financial data extraction from Microsoft billing documents\n- Currency normalization using provided FX rates\n- Microsoft Regional Sales entity identification\n\nCRITICAL: When processing multiple Microsoft invoices in a batch, ensure each invoice's date information is extracted independently. Do not mix dates from different documents.\nAlways output your analysis in the exact JSON format specified, ensuring data accuracy and consistency for automated processing systems.\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        560,
+        -432
+      ],
+      "id": "83e4b75d-f8d4-46b0-9e44-7b82c9b7a2ae",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        256,
+        -128
+      ],
+      "id": "c21e2e6f-09ee-4fab-8e2d-97f55e5d18c5",
+      "name": "OpenAI Chat Model",
+      "credentials": {}
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"timestamp\": \"{{ $now }}\",\n  \"client_name\": \"string\",\n  \"client_company\": \"string\", \n  \"country\": \"string\",\n  \"billing_id\": \"string\",\n  \"id\": \"string\",\n  \"date_id\": \"YYYY-MM-DD\",\n  \"month_of_billing\": \"YYYY-MM\",\n  \"platform\": \"Outlook\",\n  \"currency\": \"string\",\n  \"price_paid\": \"number_only\",\n  \"price_paid_thb\": \"number_only\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        480,
+        -128
+      ],
+      "id": "4ccfb2f3-3a8a-4ea2-8921-5e6ba910ce51",
+      "name": "Structured Output Parser"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Local File Trigger": {
+      "main": [
+        [
+          {
+            "node": "Read File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read File": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Upload file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheet Invoice Tracking": {
+      "main": [
+        []
+      ]
+    },
+    "Get an exchange rate": {
+      "main": [
+        [
+          {
+            "node": "Parse Exchange Rate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse GPT value": {
+      "main": [
+        [
+          {
+            "node": "Get an exchange rate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Exchange Rate": {
+      "main": [
+        [
+          {
+            "node": "Google Sheet Invoice Tracking",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Parse GPT value",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "076170ed-e0fc-4539-a227-6e381bd916e7",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "529d3bc8e17069f24d690f96cc5ee9be68d03f7366bb114ddb76b5c3e8f797b0"
+  },
+  "id": "DX4DajRZ8IUXMPvE",
+  "tags": []
+}
